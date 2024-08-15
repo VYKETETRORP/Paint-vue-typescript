@@ -5,8 +5,8 @@
     <button @click="decrease">-</button>
     <input type="color" @change="handleColorChange" />
     <button @click="handleShapeSelection('circle')">&#9899;</button>
-    <button @click="handleShapeSelection('stroke')">&#9866;</button>
-    <button @click="drawLine">&#9746;</button>
+    <button @click="handleShapeSelection('line')">&#9866;</button>
+    <button @click="clearCanvas">&#9746;</button>
   </div>
   <canvas
     ref="canvas"
@@ -53,13 +53,21 @@ export default defineComponent({
     };
     const onMouseMove = (e: MouseEvent) => {
       if (isMouseClicked) {
-        let x2 = e.offsetX;
+        if(selectedShape=='circle'){
+          let x = e.offsetX
+          let y = e.offsetY
+          DrawCircle(x,y)
+        }
+        if(selectedShape=='line'){
+          let x2 = e.offsetX;
         let y2 = e.offsetY;
         // DrawCircle(x, y);
         drawLine(x1,y1,x2,y2);
         x1=x2;
         y1=y2;
 
+        }
+        
 
       }
     };
