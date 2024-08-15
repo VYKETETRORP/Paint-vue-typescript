@@ -4,7 +4,9 @@
     <span>{{ size }}</span>
     <button @click="decrease">-</button>
     <input type="color" @change="handleColorChange" />
-    <button @click="clearCanvas">&#9746;</button>
+    <button @click="handleShapeSelection('circle')">&#9899;</button>
+    <button @click="handleShapeSelection('stroke')">&#9866;</button>
+    <button @click="drawLine">&#9746;</button>
   </div>
   <canvas
     ref="canvas"
@@ -17,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import { defineComponent } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
 export default defineComponent({
@@ -30,6 +32,10 @@ export default defineComponent({
     let isMouseClicked = false;
     const size = ref(5);
     let color = "#111";
+    let x1 =0 
+    let y1 = 0
+    let  selectedShape = "circle"
+    
 
     const DrawCircle = (x: number, y: number) => {
       let ctx = canvas.value?.getContext("2d");
@@ -41,21 +47,28 @@ export default defineComponent({
       }
     };
     const onMouseDown = (e: MouseEvent) => {
+      x1=e.offsetX
+      y1=e.offsetY
       isMouseClicked = true;
     };
     const onMouseMove = (e: MouseEvent) => {
       if (isMouseClicked) {
-        let x = e.offsetX;
-        let y = e.offsetY;
-        DrawCircle(x, y);
+        let x2 = e.offsetX;
+        let y2 = e.offsetY;
+        // DrawCircle(x, y);
+        drawLine(x1,y1,x2,y2);
+        x1=x2;
+        y1=y2;
+
+
       }
     };
     const onMouseUp = () => {
+      x1=0
+      y1=0
       isMouseClicked = false;
     };
-    onMounted(() => {
-      DrawCircle(200, 200);
-    });
+
     const increase = () => {
       size.value += 5;
       if (size.value > 50) {
@@ -86,9 +99,14 @@ export default defineComponent({
         ctx.beginPath();
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
+        ctx.lineWidth=size.value
+        ctx.strokeStyle=color
         ctx.stroke();
       }
     };
+    const handleShapeSelection = (shape:string)=>{
+      selectedShape = shape
+    }
 
     return {
       canvas,
@@ -102,6 +120,11 @@ export default defineComponent({
       color,
       clearCanvas,
       drawLine,
+      x1,
+      y1,
+      handleShapeSelection,
+     
+
     };
   },
 });
