@@ -30,7 +30,7 @@ export default defineComponent({
   setup() {
     const canvas = ref<HTMLCanvasElement>();
     let isMouseClicked = false;
-    const size = ref(5);
+    const size = ref(1);
     let color = "#111";
     let x1 =0 
     let y1 = 0
@@ -85,8 +85,8 @@ export default defineComponent({
     };
     const decrease = () => {
       size.value -= 5;
-      if (size.value < 5) {
-        size.value = 5;
+      if (size.value < 1) {
+        size.value = 1;
       }
     };
     const handleColorChange = (e: Event) => {
